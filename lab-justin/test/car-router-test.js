@@ -27,7 +27,7 @@ describe('testing car router', () => {
       year: '2017',
     };
 
-    it('should respond with a note and 200 status', () => {
+    it('should respond with a car and 200 status', () => {
       return superagent.post(`${API_URL}/api/cars`)
       .send(data)
       .then(res => {
@@ -50,7 +50,7 @@ describe('testing car router', () => {
     // 400 because no content
     it('should respond with a 400', () => {
       return superagent.post(`${API_URL}/api/cars`)
-      .send({make: 'kjsdflj'})
+      .send({make: 'kjsdflj', year: '2017'})
       .catch(res => {
         expect(res.status).toEqual(400);
       });
@@ -59,7 +59,7 @@ describe('testing car router', () => {
     // 400 because no title
     it('should respond with a 400', () => {
       return superagent.post(`${API_URL}/api/cars`)
-      .send({model: 'kjsdfljslfkjlsdfkj'})
+      .send({model: 'kjsdfljslfkjlsdfkj', year: '2017'})
       .catch(res => {
         expect(res.status).toEqual(400);
       });
@@ -68,7 +68,7 @@ describe('testing car router', () => {
     // 400 because content length is < 10
     it('should respond with a 400', () => {
       return superagent.post(`${API_URL}/api/cars`)
-      .send({make: 'hello ', model: 'ha'})
+      .send({make: 'hello ', model: 'ha', year: 'year'})
       .catch(res => {
         expect(res.status).toEqual(400);
       });
@@ -85,7 +85,7 @@ describe('testing car router', () => {
     });
   });
 
-  describe('testing GET /api/notes/:id', () => {
+  describe('testing GET /api/cars/:id', () => {
     var tempCar;
 
     afterEach(() => Car.remove({}));
@@ -93,16 +93,17 @@ describe('testing car router', () => {
       return new Car({
         make: 'hello world',
         model: 'lsakjf laksjf lkajsdf lkjasflkjasf',
+        year: 2000,
       })
       .save()
-      .then(note => {
-        tempCar = note;
+      .then(car => {
+        tempCar = car;
       });
     });
 
-    it('should respond with a note', () => {
+    it('should respond with a car', () => {
       console.log('tempCar', tempCar);
-      return superagent.get(`${API_URL}/api/notes/${tempCar._id}`)
+      return superagent.get(`${API_URL}/api/cars/${tempCar._id}`)
       .then(res => {
         expect(res.status).toEqual(200);
         expect(res.body._id).toEqual(tempCar._id);
@@ -113,23 +114,24 @@ describe('testing car router', () => {
     });
   });
 
-  describe('testing PUT /api/notes/:id', () => {
+  describe('testing PUT /api/cars/:id', () => {
     afterEach(() => Car.remove({}));
     beforeEach(() => {
       return new Car({
         make: 'hello world',
         model: 'lsakjf laksjf lkajsdf lkjasflkjasf',
+        year: 2000,
       })
       .save()
-      .then(note => {
-        tempCar = note;
+      .then(car => {
+        tempCar = car;
       });
     });
 
-    it('should respond with a note', () => {
+    it('should respond with a car', () => {
       console.log('tempCar', tempCar);
-      return superagent.put(`${API_URL}/api/notes/${tempCar._id}`)
-      .send({model: 'hello this is cool'})
+      return superagent.put(`${API_URL}/api/cars/${tempCar._id}`)
+      .send({make: 'hello this is cool'})
       .then(res => {
         expect(res.status).toEqual(200);
         expect(res.body._id).toEqual(tempCar._id);
@@ -139,9 +141,9 @@ describe('testing car router', () => {
       });
     });
 
-    it('should respond with a note', () => {
+    it('should respond with a car', () => {
       console.log('tempCar', tempCar);
-      return superagent.put(`${API_URL}/api/notes/${tempCar._id}`)
+      return superagent.put(`${API_URL}/api/cars/${tempCar._id}`)
       .send({model: 'hehe'})
       .catch(res => {
         expect(res.status).toEqual(400);
@@ -149,12 +151,13 @@ describe('testing car router', () => {
     });
   });
 
-  describe('testing DELETE /api/notes/:id', () => {
+  describe('testing DELETE /api/cars/:id', () => {
     afterEach(() => Car.remove({}));
     beforeEach(() => {
       return new Car({
         make: 'hello world',
         model: 'lsakjf laksjf lkajsdf lkjasflkjasf',
+        year: 2000,
       })
       .save()
       .then(note => {
@@ -162,9 +165,9 @@ describe('testing car router', () => {
       });
     });
 
-    it('should delete a note', () => {
+    it('should delete a car', () => {
       console.log('tempCar', tempCar);
-      return superagent.delete(`${API_URL}/api/notes/${tempCar._id}`)
+      return superagent.delete(`${API_URL}/api/cars/${tempCar._id}`)
       .then(res => {
         expect(res.status).toEqual(204);
       });
@@ -172,14 +175,14 @@ describe('testing car router', () => {
 
     it('bad id should respond with a 404', () => {
       console.log('tempCar', tempCar);
-      return superagent.delete(`${API_URL}/api/notes/12134`)
+      return superagent.delete(`${API_URL}/api/cars/12134`)
       .catch(res => {
         expect(res.status).toEqual(404);
       });
     });
     it('bad id should respond with a 404', () => {
       console.log('tempCar', tempCar);
-      return superagent.delete(`${API_URL}/api/notes/5952a8d5c1b8d566a64ea23f`)
+      return superagent.delete(`${API_URL}/api/cars/5952a8d5c1b8d566a64ea23f`)
       .catch(res => {
         expect(res.status).toEqual(404);
       });

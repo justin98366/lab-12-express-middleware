@@ -6,6 +6,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 mongoose.Promise = Promise;
+mongoose.connect(process.env.MONGODB_URI);
 
 const app = express();
 let server;
@@ -13,7 +14,7 @@ let server;
 app.use(cors());
 app.use(morgan('dev'));
 
-// app.use(require('..route/car-router.js'));
+app.use(require('../route/car-router.js'));
 
 app.use(require('./error-middleware.js'));
 
